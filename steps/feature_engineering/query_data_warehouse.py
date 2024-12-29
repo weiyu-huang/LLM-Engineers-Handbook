@@ -75,15 +75,13 @@ def _get_metadata(documents: list[Document]) -> dict:
     for document in documents:
         collection = document.get_collection_name()
         if collection not in metadata:
-            metadata[collection] = {}
-        if "authors" not in metadata[collection]:
-            metadata[collection]["authors"] = list()
+            metadata[collection] = {"num_documents": 0, "authors": set()}
 
-        metadata[collection]["num_documents"] = metadata[collection].get("num_documents", 0) + 1
-        metadata[collection]["authors"].append(document.author_full_name)
+        metadata[collection]["num_documents"] += 1
+        metadata[collection]["authors"].add(document.author_full_name)
 
     for value in metadata.values():
         if isinstance(value, dict) and "authors" in value:
-            value["authors"] = list(set(value["authors"]))
+            value["authors"] = list(value["authors"])
 
     return metadata
