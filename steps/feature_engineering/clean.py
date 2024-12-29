@@ -25,15 +25,13 @@ def _get_metadata(cleaned_documents: list[CleanedDocument]) -> dict:
     for document in cleaned_documents:
         category = document.get_category()
         if category not in metadata:
-            metadata[category] = {}
-        if "authors" not in metadata[category]:
-            metadata[category]["authors"] = list()
+            metadata[category] = {"num_documents": 0, "authors": set()}
 
-        metadata[category]["num_documents"] = metadata[category].get("num_documents", 0) + 1
-        metadata[category]["authors"].append(document.author_full_name)
+        metadata[category]["num_documents"] += 1
+        metadata[category]["authors"].add(document.author_full_name)
 
     for value in metadata.values():
         if isinstance(value, dict) and "authors" in value:
-            value["authors"] = list(set(value["authors"]))
+            value["authors"] = list(value["authors"])
 
     return metadata
