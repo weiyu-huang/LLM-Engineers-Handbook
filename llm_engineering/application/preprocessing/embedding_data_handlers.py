@@ -27,7 +27,7 @@ class EmbeddingDataHandler(ABC, Generic[ChunkT, EmbeddedChunkT]):
         return self.embed_batch([data_model])[0]
 
     def embed_batch(self, data_model: list[ChunkT]) -> list[EmbeddedChunkT]:
-        embedding_model_input = [data_model.content for data_model in data_model]
+        embedding_model_input = [chunk.content for chunk in data_model]
         embeddings = embedding_model(embedding_model_input, to_list=True)
 
         embedded_chunk = [
